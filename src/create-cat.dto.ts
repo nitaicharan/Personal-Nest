@@ -1,35 +1,27 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { UserRole } from "./user-role.enum";
+import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
 
 export class CreateCatDto {
-    @ApiProperty({
-        type: [String],
-        // isArray: true,
-    })
-    name: string[];
+    @ApiProperty()
+    name: string;
 
-    @ApiProperty({
-        description: 'The age of cat',
-        minimum: 1,
-        default: 1,
-        type: Number,
-    })
+    @ApiProperty()
     age: number;
 
     @ApiProperty()
     breed: string;
-
-    @ApiProperty({ enum: ['Admin', 'Moderator', 'User'], enumName: 'UserRole' })
-    role: UserRole;
-
-    @ApiProperty({
-        type: 'array',
-        items: {
-            type: 'array',
-            items: {
-                type: 'number',
-            },
-        },
-    })
-    coords: number[][];
 }
+
+export class AdditionalCatInfo {
+    @ApiProperty()
+    color: string;
+}
+
+export class PartialUpdateCatDto extends PartialType(CreateCatDto) { }
+
+export class PickUpdateCatDto extends PickType(CreateCatDto, ['age']) { }
+
+export class OmitUpdateCatDto extends OmitType(CreateCatDto, ['name']) { }
+
+export class IntersectionUpdateCatDto extends IntersectionType(CreateCatDto, AdditionalCatInfo) { }
+
+export class CompositionUpdateCatDto extends PartialType(OmitType(CreateCatDto, ['name'])) { }
