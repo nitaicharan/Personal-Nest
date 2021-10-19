@@ -9,6 +9,10 @@ import { AppModule } from './app.module';
     .setTitle('Personal-Nest')
     .setDescription('This project is part of my personal study about the framework for building efficient, reliable and scalable server-side applications Nest.')
     .setVersion('1.0')
+    .addSecurity('basic', {
+      type: 'http',
+      scheme: 'basic',
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

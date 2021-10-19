@@ -1,6 +1,6 @@
 import { applyDecorators, Body, Controller, Delete, Get, Patch, Post, Query, Type, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiExtension, ApiExtraModels, ApiHeader, ApiOkResponse, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiExtension, ApiExtraModels, ApiHeader, ApiOkResponse, ApiQuery, ApiSecurity, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { CatDto } from './cat.dto';
 import { CreateCatDto } from './create-cat.dto';
@@ -30,6 +30,7 @@ const ApiPaginatedResponse = <TModel extends Type<any>>(
   );
 };
 
+@ApiSecurity('basic')
 @ApiTags('cats')
 @ApiHeader({
   name: 'X-MyHeader',
