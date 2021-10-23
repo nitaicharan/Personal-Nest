@@ -16,7 +16,10 @@ import { AppModule } from './app.module';
     })
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    ignoreGlobalPrefix: true,
+  });
+
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
