@@ -1,18 +1,18 @@
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateCatDto {
-    @ApiProperty()
+    /**
+     * A list of user's roles
+     * @example ['admin']
+     */
     name: string;
-
-    @ApiProperty()
     age: number;
-
-    @ApiProperty()
     breed: string;
+    isEnabled: boolean;
 }
 
 export class AdditionalCatInfo {
-    @ApiProperty()
     color: string;
 }
 
