@@ -9,14 +9,14 @@ describe('ArticleController', () => {
   let service = { fetchArticles: () => [] };
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       imports: [ArticleModule],
     })
       .overrideProvider(ArticleService)
       .useValue(service)
       .compile();
 
-    app = moduleRef.createNestApplication();
+    app = module.createNestApplication();
     await app.init();
   });
 

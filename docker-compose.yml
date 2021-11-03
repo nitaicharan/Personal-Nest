@@ -1,0 +1,19 @@
+services:
+  application:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: node:slim
+    container_name: application
+    networks:
+      - application
+
+volumes:
+  application:
+
+networks:
+  application:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.172.170.0/24

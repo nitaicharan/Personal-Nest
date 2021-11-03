@@ -5,16 +5,16 @@ describe('ArticleController', () => {
   let controller: ArticleController;
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       controllers: [ArticleController],
     }).compile();
 
-    controller = moduleRef.get<ArticleController>(ArticleController);
+    controller = module.get<ArticleController>(ArticleController);
   });
 
   describe('findAll', () => {
     it('should return an array of Article', async () => {
-      expect(await controller.findAll()).toEqual([]);
+      expect(controller.findAll()).toEqual([]);
     });
   });
 });
