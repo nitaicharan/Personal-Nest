@@ -8,6 +8,8 @@ import { UpdateUsecase } from './application/usecases/users/update';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { datasource } from './infrastructure/database/datasource';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsMiddleware } from './infrastructure/middlewares/all-exception';
 
 @Module({
   imports: [
@@ -19,6 +21,10 @@ import { DatabaseModule } from './infrastructure/database/database.module';
   ],
   controllers: [UsersController],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsMiddleware,
+    },
     CreateUsecase,
     UpdateUsecase,
     ListUsecase,

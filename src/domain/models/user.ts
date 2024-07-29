@@ -1,3 +1,4 @@
+import { ArticleModel } from './article';
 import { BaseModel } from './base';
 
 export class UserModel extends BaseModel {
@@ -6,4 +7,5 @@ export class UserModel extends BaseModel {
   email: string;
   bio?: string;
   image?: string;
+  articles: ArticleModel[] = [];
 }

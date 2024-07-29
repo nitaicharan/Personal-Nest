@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { BaseModel } from 'src/domain/models/base';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { BaseEntity } from '../entities/base';
+import { PaginationModel } from 'src/domain/models/pagination';
+import { PaginationMetadataModel } from 'src/domain/models/pagination-metadata';
 
 @Injectable()
 export abstract class BaseRepository<
@@ -17,10 +19,22 @@ export abstract class BaseRepository<
     return this.toModel(entity);
   }
 
-  async list(): Promise<Model[]> {
-    const entities = await this.repository.find();
+  async list(
+    pagination: PaginationMetadataModel,
+  ): Promise<PaginationModel<Model>> {
+    const [entities, total] = await this.repository.findAndCount({
+      skip: pagination.offset,
+      take: pagination.limit,
+    });
+    const data = entities.map(this.toModel);
+    const pages = total / pagination.limit;
+    const rest = total % pagination.limit;
 
-    return entities.map(this.toModel);
+    return {
+      ...pagination,
+      data,
+      pages: pages + rest,
+    };
   }
 
   async delete(id: string) {

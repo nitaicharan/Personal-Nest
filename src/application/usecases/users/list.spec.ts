@@ -26,7 +26,7 @@ describe('ListUsecase', () => {
     it('should retrieve users', async () => {
       mockPersistency.list?.mockResolvedValue([]);
 
-      await usecase.execute();
+      await usecase.execute(expect.anything());
       expect(mockPersistency.list).toHaveBeenCalled();
     });
   });

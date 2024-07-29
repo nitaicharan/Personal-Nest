@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './repositories/user';
 import { IUserPersistency } from 'src/application/persistencies/user';
 import { UserEntity } from './entities/user';
+import { ArticleEntity } from './entities/article';
 
 const services = [
   {
@@ -11,7 +12,7 @@ const services = [
   },
 ];
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity, ArticleEntity])],
   providers: services,
   exports: services,
 })

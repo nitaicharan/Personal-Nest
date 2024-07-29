@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base';
+import { ArticleEntity } from './article';
 
-@Entity()
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @Column()
   name: string;
@@ -17,4 +18,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   image?: string;
+
+  @OneToMany(() => ArticleEntity, (article) => article.author)
+  articles: ArticleEntity[];
 }
