@@ -1,0 +1,17 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "src",
+  "testRegex": ".*\\.spec\\.ts$",
+  "clearMocks": true,
+  "resetMocks": true,
+  "restoreMocks": true,
+  "coverageDirectory": "../coverage",
+  "testEnvironment": "node",
+  "collectCoverageFrom": ["**/*.(t|j)s"],
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^src/(.*)$": "<rootDir>/$1"
+  }
+}
