@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { BaseModel } from 'src/domain/models/base';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { BaseEntity } from '../entities/base';
@@ -13,46 +13,72 @@ export abstract class BaseRepository<
   constructor(protected readonly repository: Repository<Entity>) {}
 
   async create(model: Model): Promise<Model> {
-    const temp = this.repository.create(this.fromModel(model));
-    const entity = await this.repository.save(temp);
+    try {
+      const temp = this.repository.create(this.fromModel(model));
+      const entity = await this.repository.save(temp);
 
-    return this.toModel(entity);
+      return this.toModel(entity);
+    } catch (error) {
+      console.error(typeof error, error);
+
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async list(
     pagination: PaginationMetadataModel,
   ): Promise<PaginationModel<Model>> {
-    const [entities, total] = await this.repository.findAndCount({
-      skip: pagination.offset,
-      take: pagination.limit,
-    });
-    const data = entities.map(this.toModel);
-    const pages = total / pagination.limit;
-    const rest = total % pagination.limit;
+    try {
+      const [entities, total] = await this.repository.findAndCount({
+        skip: pagination.offset,
+        take: pagination.limit,
+      });
 
-    return {
-      ...pagination,
-      data,
-      pages: pages + rest,
-    };
+      const data = entities.map(this.toModel);
+      const pages = Math.ceil(total / pagination.limit) + 1;
+      const page = Math.floor(pagination.offset / pagination.limit) + 1;
+
+      return {
+        data,
+        pagination: {
+          ...pagination,
+          page,
+          pages,
+        },
+      };
+    } catch (error: any) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async delete(id: string) {
-    this.repository.softDelete(id);
+    try {
+      this.repository.softDelete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async find(id: string): Promise<Model | null> {
-    const entity = await this.repository.findOneBy({
-      id: id,
-    } as FindOptionsWhere<Entity>);
+    try {
+      const entity = await this.repository.findOneBy({
+        id: id,
+      } as FindOptionsWhere<Entity>);
 
-    if (!entity) return entity;
-    return this.toModel(entity);
+      if (!entity) return entity;
+      return this.toModel(entity);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async update(id: string, model: Model): Promise<void> {
-    const tmp = this.fromModel(model);
-    this.repository.update({ id } as any, tmp as any);
+    try {
+      const tmp = this.fromModel(model);
+      this.repository.update({ id } as any, tmp as any);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   abstract fromModel(model: Model): Entity;

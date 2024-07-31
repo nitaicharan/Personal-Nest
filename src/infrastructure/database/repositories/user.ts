@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from 'src/domain/models/user';
 import { Repository } from 'typeorm';
@@ -15,7 +15,11 @@ export class UserRepository extends BaseRepository<UserModel, UserEntity> {
   }
 
   findByUsernameOrEmail(username: string, email: string) {
-    return this.repository.findBy({ username, email });
+    try {
+      return this.repository.find({ where: [{ username }, { email }] });
+    } catch (error: any) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   fromModel(model: UserModel): UserEntity {

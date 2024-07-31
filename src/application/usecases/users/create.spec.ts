@@ -26,19 +26,32 @@ describe('CreateUseCase', () => {
   });
 
   describe('execute', () => {
-    it('should throw an exception when a user with the same username already exists', async () => {
-      const existingUsername = 'existingUser';
+    it('should throw an exception when a user with the unique values already exists', async () => {
+      const user1 = 'existing-username';
 
       mockPersistency.findByUsernameOrEmail?.mockReturnValueOnce(
         Promise.resolve([
           {
-            username: existingUsername,
+            username: user1,
+          } as UserModel,
+        ]),
+      );
+
+      const user2 = 'existing-email';
+      mockPersistency.findByUsernameOrEmail?.mockReturnValueOnce(
+        Promise.resolve([
+          {
+            email: user2,
           } as UserModel,
         ]),
       );
 
       await expect(() =>
-        usecase.execute(<UserModel>{ username: existingUsername }),
+        usecase.execute(<UserModel>{ username: user1 }),
+      ).rejects.toThrow();
+
+      await expect(() =>
+        usecase.execute(<UserModel>{ email: user2 }),
       ).rejects.toThrow();
     });
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IUserPersistency } from 'src/application/persistencies/user';
 import { BaseModel } from 'src/domain/models/base';
 import { UserModel } from 'src/domain/models/user';
@@ -17,7 +17,9 @@ export class CreateUsecase {
     );
 
     if (usernameCheck.length) {
-      throw Error(`User with username: ${model.username} already exists!`);
+      throw new BadRequestException(
+        `User with username: ${model.username} or email: ${model.email} already exists!`,
+      );
     }
 
     return this.persistency.create(model);

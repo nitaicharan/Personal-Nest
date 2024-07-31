@@ -1,20 +1,4 @@
-import { IsEmail, IsOptional, IsString, IsUrl } from 'class-validator';
+import { OmitType } from '@nestjs/swagger';
+import { UpdateDto } from './update';
 
-export class CreateDto {
-  @IsString()
-  name: string;
-
-  @IsString()
-  username: string;
-
-  @IsEmail()
-  email: string;
-
-  @IsOptional()
-  @IsString()
-  bio?: string;
-
-  @IsOptional()
-  @IsUrl()
-  image?: string;
-}
+export class CreateDto extends OmitType(UpdateDto, ['id']) {}
